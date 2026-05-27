@@ -1,64 +1,113 @@
-import Link from "next/link";
-
-const apps = [
-  {
-    title: "見積もり",
-    description: "見積書の作成・管理ができます。取引先ごとの見積もり状況をひと目で把握できます。",
-    href: "/estimates",
-    gradient: "from-blue-500 to-cyan-400",
-    iconPath: "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z",
-  },
-  {
-    title: "発注書",
-    description: "発注書の作成・管理ができます。発注状況のトラッキングで抜け漏れを防ぎます。",
-    href: "/orders",
-    gradient: "from-emerald-500 to-teal-400",
-    iconPath: "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4",
-  },
-  {
-    title: "請求書",
-    description: "請求書の作成・管理ができます。入金ステータスの管理で回収漏れを防ぎます。",
-    href: "/invoices",
-    gradient: "from-violet-500 to-purple-400",
-    iconPath: "M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z",
-  },
+const recentDocuments = [
+  { id: "EST-2026-003", type: "見積もり", client: "グローバルメディア株式会社", title: "ECサイト構築", amount: 3200000, date: "2026-05-24", status: "下書き" },
+  { id: "INV-2026-003", type: "請求書", client: "テクノソリューションズ株式会社", title: "業務システム開発（中間金）", amount: 2700000, date: "2026-05-15", status: "送付済み" },
+  { id: "PO-2026-003", type: "発注書", client: "クラウドサービス株式会社", title: "クラウドインフラ利用料", amount: 3600000, date: "2026-05-20", status: "承認待ち" },
+  { id: "INV-2026-005", type: "請求書", client: "グローバルメディア株式会社", title: "コンサルティング費用", amount: 550000, date: "2026-04-25", status: "延滞" },
+  { id: "EST-2026-002", type: "見積もり", client: "テクノソリューションズ株式会社", title: "業務システム開発", amount: 5400000, date: "2026-05-22", status: "送付済み" },
 ];
 
-export default function Home() {
+const alerts = [
+  { message: "請求書 INV-2026-005 の支払期限が超過しています", type: "error" as const },
+  { message: "見積もり EST-2026-001 の有効期限が5日以内です", type: "warning" as const },
+  { message: "発注書 PO-2026-003 が承認待ちです", type: "info" as const },
+];
+
+const alertStyles = {
+  error: "bg-red-50 border-red-200 text-red-700",
+  warning: "bg-yellow-50 border-yellow-200 text-yellow-700",
+  info: "bg-blue-50 border-blue-200 text-blue-700",
+};
+
+const typeColors: Record<string, string> = {
+  "見積もり": "bg-blue-100 text-blue-700",
+  "発注書": "bg-green-100 text-green-700",
+  "請求書": "bg-purple-100 text-purple-700",
+};
+
+const statusColors: Record<string, string> = {
+  "下書き": "text-gray-500",
+  "送付済み": "text-blue-600",
+  "承認待ち": "text-yellow-600",
+  "入金済み": "text-green-600",
+  "延滞": "text-red-600",
+};
+
+function fmt(n: number) {
+  return "¥" + n.toLocaleString();
+}
+
+export default function HomePage() {
   return (
-    <div className="max-w-5xl mx-auto px-6 py-16">
-      <div className="mb-12 text-center">
-        <h1 className="text-4xl font-bold text-gray-900 mb-3">書類管理ダッシュボード</h1>
-        <p className="text-gray-400 text-lg">見積もり・発注書・請求書の作成と管理</p>
+    <div className="px-8 py-6">
+      <div className="mb-6">
+        <h1 className="text-xl font-bold text-gray-900">ダッシュボード</h1>
+        <p className="text-sm text-gray-500 mt-0.5">2026年5月の概況</p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        {apps.map((app) => (
-          <Link
-            key={app.href}
-            href={app.href}
-            className="group glass glass-hover rounded-2xl p-6 transition-all duration-300 hover:scale-[1.02]"
-          >
-            <div
-              className={`w-11 h-11 rounded-xl bg-gradient-to-br ${app.gradient} flex items-center justify-center mb-5 shadow-lg group-hover:shadow-xl transition-shadow`}
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <path d={app.iconPath} />
-              </svg>
-            </div>
-            <h2 className="text-base font-semibold text-gray-800 mb-2 group-hover:text-gray-900 transition-colors">
-              {app.title}
-            </h2>
-            <p className="text-sm text-gray-400 leading-relaxed group-hover:text-gray-500 transition-colors">
-              {app.description}
-            </p>
-            <div className="mt-5 flex items-center gap-1 text-xs text-gray-300 group-hover:text-gray-500 transition-colors">
-              <span>管理画面を開く</span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-0.5 transition-transform">
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </div>
-          </Link>
+
+      {/* KPI */}
+      <div className="grid grid-cols-4 gap-4 mb-6">
+        <div className="bg-white rounded-lg border border-gray-200 p-4">
+          <p className="text-xs text-gray-500 mb-1">今月の売上（入金済み）</p>
+          <p className="text-2xl font-bold text-gray-900">¥3,890,000</p>
+          <p className="text-xs text-green-600 mt-1">前月比 +12%</p>
+        </div>
+        <div className="bg-white rounded-lg border border-gray-200 p-4">
+          <p className="text-xs text-gray-500 mb-1">未回収額</p>
+          <p className="text-2xl font-bold text-gray-900">¥5,990,000</p>
+          <p className="text-xs text-gray-400 mt-1">送付済み 3件</p>
+        </div>
+        <div className="bg-white rounded-lg border border-gray-200 p-4">
+          <p className="text-xs text-gray-500 mb-1">見積もり（承認待ち）</p>
+          <p className="text-2xl font-bold text-gray-900">2件</p>
+          <p className="text-xs text-gray-400 mt-1">合計 ¥6,900,000</p>
+        </div>
+        <div className="bg-white rounded-lg border border-gray-200 p-4">
+          <p className="text-xs text-gray-500 mb-1">今月の発注額</p>
+          <p className="text-2xl font-bold text-gray-900">¥5,696,000</p>
+          <p className="text-xs text-gray-400 mt-1">発注 7件</p>
+        </div>
+      </div>
+
+      {/* アラート */}
+      <div className="space-y-2 mb-6">
+        {alerts.map((alert, i) => (
+          <div key={i} className={`px-4 py-2.5 rounded-lg border text-sm ${alertStyles[alert.type]}`}>
+            {alert.message}
+          </div>
         ))}
+      </div>
+
+      {/* 最近の書類 */}
+      <div className="bg-white rounded-lg border border-gray-200">
+        <div className="px-4 py-3 border-b border-gray-200">
+          <h2 className="text-sm font-medium text-gray-900">最近の書類</h2>
+        </div>
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b border-gray-100 text-gray-500 text-xs">
+              <th className="text-left px-4 py-2.5 font-medium">番号</th>
+              <th className="text-left px-4 py-2.5 font-medium">種類</th>
+              <th className="text-left px-4 py-2.5 font-medium">取引先</th>
+              <th className="text-left px-4 py-2.5 font-medium">件名</th>
+              <th className="text-right px-4 py-2.5 font-medium">金額</th>
+              <th className="text-left px-4 py-2.5 font-medium">ステータス</th>
+            </tr>
+          </thead>
+          <tbody>
+            {recentDocuments.map((doc) => (
+              <tr key={doc.id} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
+                <td className="px-4 py-2.5 font-mono text-xs text-gray-500">{doc.id}</td>
+                <td className="px-4 py-2.5">
+                  <span className={`text-xs px-2 py-0.5 rounded font-medium ${typeColors[doc.type]}`}>{doc.type}</span>
+                </td>
+                <td className="px-4 py-2.5 text-gray-700">{doc.client}</td>
+                <td className="px-4 py-2.5 text-gray-600">{doc.title}</td>
+                <td className="px-4 py-2.5 text-right font-mono text-gray-900">{fmt(doc.amount)}</td>
+                <td className={`px-4 py-2.5 text-xs font-medium ${statusColors[doc.status]}`}>{doc.status}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
