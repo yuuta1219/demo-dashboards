@@ -77,6 +77,30 @@ export default function HomePage() {
         ))}
       </div>
 
+      {/* 新着注文 */}
+      <div className="bg-white rounded-lg border border-gray-200 mb-6">
+        <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
+          <h2 className="text-sm font-medium text-gray-900">新着注文（フォーム経由）</h2>
+          <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded font-medium">2件 未対応</span>
+        </div>
+        <div className="divide-y divide-gray-50">
+          <div className="px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors">
+            <div>
+              <p className="text-sm text-gray-900 font-medium">株式会社田中製作所 - ステンレスボルト他3点</p>
+              <p className="text-xs text-gray-400 mt-0.5">2026-05-27 14:32 受付 ・ 担当者: 田中 太郎</p>
+            </div>
+            <button className="text-xs text-blue-600 border border-blue-200 bg-blue-50 px-3 py-1 rounded hover:bg-blue-100 transition-colors">見積もりを作成</button>
+          </div>
+          <div className="px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors">
+            <div>
+              <p className="text-sm text-gray-900 font-medium">大阪機械工業株式会社 - 切削工具セット</p>
+              <p className="text-xs text-gray-400 mt-0.5">2026-05-27 10:15 受付 ・ 担当者: 佐藤 健一</p>
+            </div>
+            <button className="text-xs text-blue-600 border border-blue-200 bg-blue-50 px-3 py-1 rounded hover:bg-blue-100 transition-colors">見積もりを作成</button>
+          </div>
+        </div>
+      </div>
+
       {/* 最近の書類 */}
       <div className="bg-white rounded-lg border border-gray-200">
         <div className="px-4 py-3 border-b border-gray-200">
